@@ -4,6 +4,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Tours from "./pages/Tours";
+import TourDetails from "./pages/TourDetails";
+
 
 export default function App() {
   return (
@@ -12,6 +14,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/tours" element={<Tours />} />
+        <Route path="/tour/:id" element={<TourDetails />} />
+
       </Routes>
       <Footer />
     </BrowserRouter>

@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 export default function TourCard({ tour }) {
   const { i18n } = useTranslation();
@@ -26,9 +27,12 @@ export default function TourCard({ tour }) {
 
       <p className="text-teal-600 font-semibold mt-2">{tour.price}</p>
 
-      <button className="mt-3 w-full bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-lg transition">
+      <Link
+        to={`/tour/${tour.id}`}
+        className="mt-3 block bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-lg text-center transition"
+      >
         {isFA ? "مشاهده جزئیات" : "View Details"}
-      </button>
+      </Link>
     </motion.div>
   );
 }
