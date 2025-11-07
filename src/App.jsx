@@ -5,6 +5,9 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Tours from "./pages/Tours";
 import TourDetails from "./pages/TourDetails";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+
 
 
 export default function App() {
@@ -15,6 +18,8 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/tours" element={<Tours />} />
         <Route path="/tour/:id" element={<TourDetails />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
       </Routes>
       <Footer />
