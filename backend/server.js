@@ -1,17 +1,17 @@
 import express from "express";
+import mongoose from "mongoose";
 import cors from "cors";
-import connectDB from "./config/db.js";
-import authRoutes from "./routes/authRoutes.js";
+import tourRoutes from "./routes/tours.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// اتصال به دیتابیس
-connectDB();
+mongoose
+  .connect("mongodb://127.0.0.1:27017/ashkan_travel")
+  .then(() => console.log("MongoDB connected ✅"))
+  .catch((err) => console.log("Mongo Error:", err));
 
-// ثبت روت‌ها
-app.use("/auth", authRoutes);
+app.use("/api/tours", tourRoutes);
 
-// روشن کردن سرور
-app.listen(5000, () => console.log("✅ Server running at http://localhost:5000"));
+app.listen(5000, () => console.log("Server running on port 5000 🚀"));

@@ -1,38 +1,25 @@
 import React from "react";
-import { motion } from "framer-motion";
-import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 export default function TourCard({ tour }) {
-  const { i18n } = useTranslation();
-  const isFA = i18n.language === "fa";
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-xl shadow hover:shadow-xl transition p-3 cursor-pointer"
-    >
+    <div className="border rounded-xl shadow hover:shadow-lg p-4 bg-white">
       <img
         src={tour.image}
-        alt={tour.title_fa}
-        className="w-full h-48 object-cover rounded-lg"
+        alt={tour.title}
+        className="w-full h-48 object-cover rounded"
       />
-
-      <h3 className="text-lg font-bold text-teal-700 mt-3">
-        {isFA ? tour.title_fa : tour.title_en}
-      </h3>
-
-      <p className="text-gray-500 text-sm mt-1">{tour.duration}</p>
-
-      <p className="text-teal-600 font-semibold mt-2">{tour.price}</p>
-
+      <h2 className="text-xl font-bold text-teal-600 mt-3">{tour.title}</h2>
+      <p className="text-gray-600 mt-1">{tour.duration} روزه</p>
+      <p className="text-gray-800 font-semibold mt-2">
+        {tour.price.toLocaleString()} تومان
+      </p>
       <Link
-        to={`/tour/${tour.id}`}
-        className="mt-3 block bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-lg text-center transition"
+        to={`/tour/${tour._id}`}
+        className="block mt-4 bg-teal-600 text-white py-2 rounded hover:bg-teal-700"
       >
-        {isFA ? "مشاهده جزئیات" : "View Details"}
+        مشاهده جزئیات
       </Link>
-    </motion.div>
+    </div>
   );
 }
