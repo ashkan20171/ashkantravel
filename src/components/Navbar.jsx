@@ -10,6 +10,7 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const language = useSelector((state) => state.language.value);
   const user = useSelector((state) => state.user.user);
+  
 
   const changeLang = (lang) => {
     dispatch(setLanguage(lang));
@@ -46,6 +47,11 @@ export default function Navbar() {
         >
           EN
         </button>
+          {user?.role === "admin" && (
+          <Link to="/admin" className="text-sm bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700">
+          پنل مدیریت
+          </Link>
+           )}
 
         {/* نمایش وضعیت کاربر */}
         {user ? (
@@ -63,6 +69,7 @@ export default function Navbar() {
             ورود
           </Link>
         )}
+        <Link to="/bookings" className="hover:text-teal-600">{t("bookings")}</Link>
       </div>
     </nav>
   );
