@@ -1,47 +1,91 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import tours from "../data/tours";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 export default function TourDetails() {
   const { id } = useParams();
-  const { i18n } = useTranslation();
-  const isFA = i18n.language === "fa";
+  const [tour, setTour] = useState(null);
+  const [form, setForm] = useState({ name: "", email: "", phone: "" });
+  const [message, setMessage] = useState("");
 
-  const tour = tours.find((t) => t.id == id);
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/tours`)
+      .then((res) => res.json())
+      .then((data) => {
+        const found = data.find((t) => t._id === id);
+        setTour(found);
+      })
+      .catch((err) => console.error(err));
+  }, [id]);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleBooking = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:5000/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, tourId: id }),
+      });
+      const data = await res.json();
+      setMessage(data.message || "رزرو انجام شد ✅");
+    } catch (err) {
+      setMessage("خطا در رزرو ❌");
+    }
+  };
+
+  if (!tour) return <p className="text-center mt-10 text-gray-500">در حال بارگذاری...</p>;
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-teal-600 text-center mb-6">
-        {isFA ? tour.title_fa : tour.title_en}
-      </h1>
-
-      {/* گالری عکس */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-        {tour.images.map((img, index) => (
-          <img key={index} src={img} className="rounded-lg object-cover h-48 w-full" />
-        ))}
-      </div>
-
-      {/* توضیحات */}
-      <p className="text-gray-600 leading-7 mb-6">
-        {isFA ? tour.description_fa : tour.description_en}
+    <div className="max-w-4xl mx-auto p-8">
+      <img src={tour.image} alt={tour.title} className="w-full rounded-lg shadow mb-6" />
+      <h1 className="text-3xl font-bold text-teal-700 mb-2">{tour.title}</h1>
+      <p className="text-gray-700 mb-4">{tour.description}</p>
+      <p className="text-lg text-gray-800 font-semibold mb-6">
+        قیمت: {tour.price.toLocaleString()} تومان
       </p>
 
-      {/* مشخصات */}
-      <div className="border p-4 rounded-lg mb-6">
-        <p><strong>{isFA ? "مدت سفر:" : "Duration:"}</strong> {tour.duration}</p>
-        <p><strong>{isFA ? "قیمت:" : "Price:"}</strong> {tour.price}</p>
-      </div>
+      <h2 className="text-2xl font-bold text-teal-700 mb-4">فرم رزرو</h2>
+      <form onSubmit={handleBooking} className="grid gap-4 max-w-md">
+        <input
+          type="text"
+          name="name"
+          placeholder="نام"
+          value={form.name}
+          onChange={handleChange}
+          className="p-3 border rounded"
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="ایمیل"
+          value={form.email}
+          onChange={handleChange}
+          className="p-3 border rounded"
+          required
+        />
+        <input
+          type="tel"
+          name="phone"
+          placeholder="شماره تماس"
+          value={form.phone}
+          onChange={handleChange}
+          className="p-3 border rounded"
+        />
+        <button
+          type="submit"
+          className="bg-teal-600 text-white py-2 rounded hover:bg-teal-700 transition"
+        >
+          رزرو تور
+        </button>
+      </form>
 
-      {/* نقشه */}
-      <MapContainer center={tour.location} zoom={10} className="h-72 w-full rounded-lg shadow">
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <Marker position={tour.location}>
-          <Popup>{isFA ? tour.title_fa : tour.title_en}</Popup>
-        </Marker>
-      </MapContainer>
+      {message && (
+        <p className="mt-4 text-center text-teal-700 font-semibold">{message}</p>
+      )}
     </div>
   );
 }
