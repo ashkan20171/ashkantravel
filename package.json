@@ -1,7 +1,7 @@
 {
-  "name": "ashkan-travel",
+  "name": "ashkan-travel-ui",
   "version": "1.0.0",
-  "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.10.1",
+    "@tailwindcss/vite": "^4.1.17",
     "framer-motion": "^12.23.24",
     "i18next": "^25.6.1",
     "leaflet": "^1.9.4",
@@ -23,7 +24,7 @@
     "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.23",
-    "tailwindcss": "^3.3.2",
+    "tailwindcss": "^3.4.18",
     "vite": "^4.3.9"
   }
 }
